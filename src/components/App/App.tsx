@@ -1,3 +1,4 @@
+// https://javascript.plainenglish.io/creating-a-sign-up-form-in-react-with-typescript-516b1a172913
 import React from 'react'
 import {
   makeStyles,
@@ -9,6 +10,11 @@ import {
 import './App.css'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
+import { Database } from '../../types/forecasts'
+
+
+const supabase = createClient<Database>('url', 'key')
 
 const useStyles = makeStyles(theme => ({
   heading: {
@@ -31,10 +37,17 @@ function App() {
 
   const { heading, submitButton } = useStyles()
 
-  const [json, setJson] = useState<string>()
+  const onSubmit = async (formData: IFormInput) => {
+    const { data, error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+    })
 
-  const onSubmit = (data: IFormInput) => {
-    setJson(JSON.stringify(data))
+    if (!error) {
+      alert('Please confirm your registration through your email')
+    } else {
+      alert(error)
+    }
   }
 
   return (
@@ -46,14 +59,6 @@ function App() {
           variant="outlined"
           margin="normal"
           label="Email"
-          fullWidth
-          required
-        />
-        <TextField
-          {...register('firstName')}
-          variant="outlined"
-          margin="normal"
-          label="First Name"
           fullWidth
           required
         />
