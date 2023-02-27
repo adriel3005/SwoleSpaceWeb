@@ -5,7 +5,6 @@ import {
   BrowserRouter,
   Routes, //replaces "Switch" used till v5
   Route,
-  Link,
 } from 'react-router-dom'
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 
