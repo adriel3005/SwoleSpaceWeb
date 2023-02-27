@@ -1,18 +1,12 @@
-import React from 'react'
-import {
-  makeStyles,
-  Container,
-  Typography,
-  TextField,
-  Button,
-} from '@material-ui/core'
+import { Link } from 'react-router-dom'
 import InputForm, { InputType } from '../../components/InputForm/InputForm'
 
 const SignUpPage = () => {
   return (
-    <Container>
+    <div>
       <InputForm inputType={InputType.SignUp} />
-    </Container>
+      <Link to="/">Login</Link>
+    </div>
   )
 }
 
