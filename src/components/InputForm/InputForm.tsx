@@ -25,8 +25,8 @@ interface InputInterface {
 }
 
 export enum InputType {
-  Login,
-  SignUp,
+  Login = 'Login',
+  SignUp = 'Sign up',
 }
 
 const useStyles = makeStyles(theme => ({
@@ -69,38 +69,33 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
   }
 
   const registerUser = async (formData: IFormInput) => {
-    console.log('register user') // temp
-
-    // const { error } = await supabase.auth.signUp({
-    //   email: formData.email,
-    //   password: formData.password,
-    // })
-
-    // if (!error) {
-    //   alert('Please confirm your registration through your email')
-    // } else {
-    //   alert(error)
-    // }
+    const { error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+    })
+    if (!error) {
+      alert('Please confirm your registration through your email')
+    } else {
+      alert(error)
+    }
   }
 
   const signInUser = async (formData: IFormInput) => {
-    console.log('sign in function')
+    const { error } = await supabase.auth.signInWithPassword({
+      email: formData.email,
+      password: formData.password,
+    })
 
-    // const { error } = await supabase.auth.signInWithPassword({
-    //   email: formData.email,
-    //   password: formData.password,
-    // })
-
-    // if (!error) {
-    //   alert('Incorrect login credentials')
-    // } else {
-    //   alert(error)
-    // }
+    if (!error) {
+      alert('Successfully logged in!')
+    } else {
+      alert(error)
+    }
   }
 
   return (
     <Container>
-      <Typography>Sign up</Typography>
+      <Typography>{userInput.inputType}</Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField
           {...register('email')}
@@ -126,7 +121,7 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
           color="primary"
           className={submitButton}
         >
-          Sign Up
+          {userInput.inputType}
         </Button>
       </form>
     </Container>
