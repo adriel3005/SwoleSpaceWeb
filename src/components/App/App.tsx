@@ -12,9 +12,7 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { Database } from '../../types/forecasts'
-import SignUpPage from '../SignUpPage/SignUpPage'
-
-let test = true
+import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 
 function App() {
   return <SignUpPage />
