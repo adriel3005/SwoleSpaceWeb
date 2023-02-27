@@ -17,7 +17,6 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/Signup" element={<SignUpPage />} />
         </Routes>
-        <Link to="/Signup">Sign Up</Link>
       </BrowserRouter>
     </div>
   )
