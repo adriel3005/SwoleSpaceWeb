@@ -22,6 +22,7 @@ interface IFormInput {
 
 interface InputInterface {
   inputType: InputType
+  callbackFunction?: () => void
 }
 
 export enum InputType {
@@ -45,26 +46,26 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
   const { heading, submitButton } = useStyles()
 
   const onSubmit = async (formData: IFormInput) => {
-    if (userInput.inputType === InputType.Login) {
-      console.log('Login sequence')
-    }
-
-    if (userInput.inputType === InputType.SignUp) {
-      console.log('Signup sequence')
-    }
-
     switch (userInput.inputType) {
       case InputType.Login:
-        signInUser(formData)
+        await signInUser(formData)
         break
 
       case InputType.SignUp:
-        registerUser(formData)
+        await registerUser(formData)
         break
 
       default:
         console.log('Input type undefined')
         break
+    }
+
+    formCallback()
+  }
+
+  function formCallback() {
+    if (typeof userInput.callbackFunction !== 'undefined') {
+      userInput.callbackFunction()
     }
   }
 
