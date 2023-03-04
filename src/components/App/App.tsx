@@ -7,6 +7,7 @@ import {
   Route,
 } from 'react-router-dom'
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
+import AccountPage from '../../pages/AccountPage/AccountPage'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/Signup" element={<SignUpPage />} />
+          <Route path="/Account" element={<AccountPage />} />
         </Routes>
       </BrowserRouter>
     </div>

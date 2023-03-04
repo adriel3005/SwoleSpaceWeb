@@ -22,6 +22,7 @@ interface IFormInput {
 
 interface InputInterface {
   inputType: InputType
+  callbackFunction?: () => void
 }
 
 export enum InputType {
@@ -45,26 +46,32 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
   const { heading, submitButton } = useStyles()
 
   const onSubmit = async (formData: IFormInput) => {
-    if (userInput.inputType === InputType.Login) {
-      console.log('Login sequence')
+    try {
+      switch (userInput.inputType) {
+        case InputType.Login:
+          await signInUser(formData)
+          break
+
+        case InputType.SignUp:
+          // TODO: copy similar login structure
+          await registerUser(formData)
+          break
+
+        default:
+          console.log('Input type undefined')
+          break
+      }
+
+      // callback if no error
+      formCallback()
+    } catch (error) {
+      console.log('error caught')
     }
+  }
 
-    if (userInput.inputType === InputType.SignUp) {
-      console.log('Signup sequence')
-    }
-
-    switch (userInput.inputType) {
-      case InputType.Login:
-        signInUser(formData)
-        break
-
-      case InputType.SignUp:
-        registerUser(formData)
-        break
-
-      default:
-        console.log('Input type undefined')
-        break
+  function formCallback() {
+    if (typeof userInput.callbackFunction !== 'undefined') {
+      userInput.callbackFunction()
     }
   }
 
@@ -90,6 +97,9 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
       alert('Successfully logged in!')
     } else {
       alert(error)
+      // TODO: there should be a better way than to throw an error. If an error is thrown
+      // every time a user can't sign in then this could overwhelm logging
+      throw error
     }
   }
 
