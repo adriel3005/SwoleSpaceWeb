@@ -14,6 +14,7 @@ const AccountPage = () => {
     | null = []
 
   const [weatherData, setWeatherData] = useState(dataSet)
+  const [loading, setLoading] = useState(false)
 
   // Retrieve forecasts only once
   useEffect(() => {
@@ -21,15 +22,17 @@ const AccountPage = () => {
   }, [])
 
   async function RenderForecasts() {
+    setLoading(true)
     const { data, error } = await supabase.from('forecasts').select('*')
     // render data to user
     setWeatherData(data ?? [])
+    setLoading(false)
   }
 
   return (
     <Container>
       <Typography>Account Page</Typography>
-      <p>Todo: Show sample DB data</p>
+      {loading && <p>Loading...</p>}
       <>
         {weatherData?.map((element, i) => (
           <div key={i}>
