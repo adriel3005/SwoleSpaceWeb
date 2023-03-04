@@ -1,19 +1,9 @@
-import { Container, makeStyles, Typography } from '@material-ui/core'
-import { render } from '@testing-library/react'
-import {
-  ReactElement,
-  JSXElementConstructor,
-  ReactFragment,
-  useState,
-  useEffect,
-} from 'react'
-import { JsxElement } from 'typescript'
-import { string } from 'yup'
+import { Container, Typography } from '@material-ui/core'
+import { useState, useEffect } from 'react'
+
 import { supabase } from '../../components/InputForm/InputForm'
 
 const AccountPage = () => {
-  let listItems: JSX.Element[] | undefined
-
   let dataSet:
     | {
         Date: string
@@ -32,26 +22,8 @@ const AccountPage = () => {
 
   async function RenderForecasts() {
     const { data, error } = await supabase.from('forecasts').select('*')
-    // console.log(data)
-    //console.log(await supabase.from('forecasts').select('*'))
-
-    //return { messages: data ?? [] }
+    // render data to user
     setWeatherData(data ?? [])
-
-    console.log('this was ran')
-    console.log(weatherData)
-    // listItems = data?.map(element => {
-    //   return (
-    //     <ul key={element.Date}>
-    //       <li>{element.Date}</li>
-    //       <li>{element.TemperatureC}</li>
-    //       <li>{element.TemperatureF}</li>
-    //       <li>{element.Summary}</li>
-    //     </ul>
-    //   )
-    // })
-
-    // return <div>{listItems}</div>
   }
 
   return (
