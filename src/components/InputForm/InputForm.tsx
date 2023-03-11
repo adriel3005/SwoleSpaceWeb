@@ -1,7 +1,7 @@
 // https://www.thisdot.co/blog/how-to-create-reusable-form-components-with-react-hook-forms-and-typescript
 // https://www.section.io/engineering-education/how-to-create-a-reusable-react-form/#:~:text=A%20Reusable%20component%20is%20a,Inside%20the%20Input.
 
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   makeStyles,
   Container,
@@ -12,13 +12,14 @@ import {
 import { useForm } from 'react-hook-form'
 import { createClient } from '@supabase/supabase-js'
 import { Database } from '../../types/forecasts'
+import { useDispatch, useSelector } from 'react-redux'
+import { UserData } from '../../supabase/SupabaseService'
+import { RootState } from '../../app/store'
+import { login } from '../../supabase/SupabaseSlice'
+import type {} from 'redux-thunk/extend-redux'
 
-const supabase = createClient<Database>('placeholder', 'placeholder')
-
-interface IFormInput {
-  email: string
-  password: string
-}
+// DO NOT COMMIT
+export const supabase = createClient<Database>()
 
 interface InputInterface {
   inputType: InputType
@@ -41,15 +42,16 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
-  const { register, handleSubmit } = useForm<IFormInput>()
-  // Styling
+  const { register, handleSubmit } = useForm<UserData>()
   const { heading, submitButton } = useStyles()
+  const loading = useSelector((state: RootState) => state.supabase.loading)
+  const dispatch = useDispatch()
 
-  const onSubmit = async (formData: IFormInput) => {
+  const onSubmit = async (formData: UserData) => {
     try {
       switch (userInput.inputType) {
         case InputType.Login:
-          await signInUser(formData)
+          dispatch(login(formData))
           break
 
         case InputType.SignUp:
@@ -75,7 +77,7 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
     }
   }
 
-  const registerUser = async (formData: IFormInput) => {
+  const registerUser = async (formData: UserData) => {
     const { error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
@@ -87,8 +89,8 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
     }
   }
 
-  const signInUser = async (formData: IFormInput) => {
-    const { error } = await supabase.auth.signInWithPassword({
+  const signInUser = async (formData: UserData) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
     })

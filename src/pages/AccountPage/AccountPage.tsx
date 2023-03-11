@@ -1,7 +1,7 @@
 import { Container, Typography } from '@material-ui/core'
 import { useState, useEffect } from 'react'
 
-import { supabase } from '../../components/InputForm/InputForm'
+import { supabase } from '../../supabase/SupabaseService'
 
 const AccountPage = () => {
   let dataSet:
