@@ -4,13 +4,17 @@ import './index.css'
 import App from './components/App/App'
 import reportWebVitals from './reportWebVitals'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import { Provider } from 'react-redux'
+import { store } from '../src/app/store'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
-  <React.StrictMode>
-    <CssBaseline />
-    <App />
-  </React.StrictMode>
+  <Provider store={store}>
+    <React.StrictMode>
+      <CssBaseline />
+      <App />
+    </React.StrictMode>
+  </Provider>
 )
 
 // If you want to start measuring performance in your app, pass a function
