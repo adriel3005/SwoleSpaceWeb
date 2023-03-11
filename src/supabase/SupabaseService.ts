@@ -17,3 +17,13 @@ export async function signInWithPassword(
     password: password,
   })
 }
+
+export async function signupWithPassword(
+  email: string,
+  password: string
+): Promise<AuthResponse> {
+  return await supabase.auth.signUp({
+    email: email,
+    password: password,
+  })
+}

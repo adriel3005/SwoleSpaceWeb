@@ -1,9 +1,11 @@
 // good resource: https://blog.logrocket.com/using-redux-toolkits-createasyncthunk/
 import { Action, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Session, User } from '@supabase/supabase-js'
-import { Interface } from 'readline'
-
-import { signInWithPassword, UserData } from './SupabaseService'
+import {
+  signInWithPassword,
+  signupWithPassword,
+  UserData,
+} from './SupabaseService'
 
 interface Auth {
   session: Session | null
@@ -32,28 +34,18 @@ export const login = createAsyncThunk(
   }
 )
 
+// async supabase call to login
+export const signup = createAsyncThunk(
+  'auth/signup',
+  async (userData: UserData) => {
+    return await signupWithPassword(userData.email, userData.password)
+  }
+)
+
 export const supabaseSlice = createSlice({
   name: 'supabase',
   initialState,
   reducers: {},
-  // reducers: {
-  //   login(state, param: UserAction) {
-  //     const promise = signInWithPassword(
-  //       param.payload?.email,
-  //       param.payload?.password
-  //     )
-  //     promise.then(
-  //       value => {
-  //         console.log(value.data)
-  //         state.session = value.data.session
-  //         state.userData = value.data.user
-  //       },
-  //       () => {
-  //         console.log('failed login promise')
-  //       }
-  //     )
-  //   },
-  // },
   extraReducers: builder => {
     builder.addCase(login.pending, state => {
       state.loading = true
@@ -68,9 +60,21 @@ export const supabaseSlice = createSlice({
     builder.addCase(login.rejected, state => {
       state.loading = false
     })
+    builder.addCase(signup.pending, state => {
+      state.loading = true
+    })
+    builder.addCase(signup.fulfilled, (state, action) => {
+      if (!action.payload.error) {
+        // TODO: check if signup returns session data
+        // update session if no error
+        state.session = action.payload.data.session
+      }
+      state.loading = false
+    })
+    builder.addCase(signup.rejected, state => {
+      state.loading = false
+    })
   },
 })
 
-const { actions, reducer } = supabaseSlice
-//export const { login } = actions
 export const supabaseReducer = supabaseSlice.reducer

@@ -10,20 +10,14 @@ import {
   Button,
 } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
-import { createClient } from '@supabase/supabase-js'
-import { Database } from '../../types/forecasts'
 import { useDispatch, useSelector } from 'react-redux'
 import { UserData } from '../../supabase/SupabaseService'
 import { RootState } from '../../app/store'
-import { login } from '../../supabase/SupabaseSlice'
+import { login, signup } from '../../supabase/SupabaseSlice'
 import type {} from 'redux-thunk/extend-redux'
-
-// DO NOT COMMIT
-export const supabase = createClient<Database>()
 
 interface InputInterface {
   inputType: InputType
-  callbackFunction?: () => void
 }
 
 export enum InputType {
@@ -53,58 +47,17 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
         case InputType.Login:
           dispatch(login(formData))
           break
-
         case InputType.SignUp:
-          // TODO: copy similar login structure
-          await registerUser(formData)
+          dispatch(signup(formData))
           break
-
         default:
           console.log('Input type undefined')
           break
       }
-
-      // callback if no error
-      formCallback()
     } catch (error) {
-      console.log('error caught')
+      console.log('error caught: ' + error)
     }
   }
-
-  function formCallback() {
-    if (typeof userInput.callbackFunction !== 'undefined') {
-      userInput.callbackFunction()
-    }
-  }
-
-  const registerUser = async (formData: UserData) => {
-    const { error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-    })
-    if (!error) {
-      alert('Please confirm your registration through your email')
-    } else {
-      alert(error)
-    }
-  }
-
-  const signInUser = async (formData: UserData) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
-    })
-
-    if (!error) {
-      alert('Successfully logged in!')
-    } else {
-      alert(error)
-      // TODO: there should be a better way than to throw an error. If an error is thrown
-      // every time a user can't sign in then this could overwhelm logging
-      throw error
-    }
-  }
-
   return (
     <Container>
       <Typography>{userInput.inputType}</Typography>

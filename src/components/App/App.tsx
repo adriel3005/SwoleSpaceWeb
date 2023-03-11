@@ -8,7 +8,6 @@ import {
 } from 'react-router-dom'
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 import AccountPage from '../../pages/AccountPage/AccountPage'
-import { configureStore } from '@reduxjs/toolkit'
 
 function App() {
   return (
