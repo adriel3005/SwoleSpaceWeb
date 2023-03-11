@@ -1,5 +1,5 @@
+// useful: https://bluelight.co/blog/redux-toolkit-with-typescript
 import { configureStore } from '@reduxjs/toolkit'
-//import counterReducer  from './counterReducer'
 import { supabaseReducer } from '../supabase/SupabaseSlice'
 
 export const store = configureStore({
