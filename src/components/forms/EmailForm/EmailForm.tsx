@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { UserData } from '../../../supabase/SupabaseService'
 import { RootState } from '../../../app/store'
-import { forgotPassword, login, signup } from '../../../supabase/SupabaseSlice'
+import { forgotPassword } from '../../../supabase/SupabaseSlice'
 import type {} from 'redux-thunk/extend-redux'
 
 interface InputInterface {
@@ -43,12 +43,6 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
   const onSubmit = async (formData: UserData) => {
     try {
       switch (userInput.inputType) {
-        // case InputType.ForgotPassword:
-        //   dispatch(login(formData))
-        //   break
-        // case InputType.SignUp:
-        //   dispatch(signup(formData))
-        //   break
         case InputType.ForgotPassword:
           console.log('dispatching forgot password')
           dispatch(forgotPassword(formData.email))
