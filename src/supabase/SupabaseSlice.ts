@@ -5,6 +5,7 @@ import {
   signInWithPassword,
   signupWithPassword,
   UserData,
+  forgotPasswordWithEmail,
 } from './SupabaseService'
 
 interface Auth {
@@ -42,6 +43,13 @@ export const signup = createAsyncThunk(
   }
 )
 
+export const forgotPassword = createAsyncThunk(
+  'auth/forgot',
+  async (email: string) => {
+    return await forgotPasswordWithEmail(email)
+  }
+)
+
 export const supabaseSlice = createSlice({
   name: 'supabase',
   initialState,
@@ -72,6 +80,20 @@ export const supabaseSlice = createSlice({
       state.loading = false
     })
     builder.addCase(signup.rejected, state => {
+      state.loading = false
+    })
+    // forgot
+    builder.addCase(forgotPassword.pending, state => {
+      state.loading = true
+    })
+    builder.addCase(forgotPassword.fulfilled, (state, action) => {
+      if (!action.payload.error) {
+        // TODO: return some indicator if email was not sent successfully
+        alert('check email for password reset, if email exists')
+      }
+      state.loading = false
+    })
+    builder.addCase(forgotPassword.rejected, state => {
       state.loading = false
     })
   },

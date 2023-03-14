@@ -1,6 +1,8 @@
 import { useSelector } from 'react-redux'
 import { Link, Navigate } from 'react-router-dom'
-import InputForm, { InputType } from '../../components/InputForm/InputForm'
+import InputForm, {
+  InputType,
+} from '../../components/forms/InputForm/InputForm'
 import { RootState } from '../../app/store'
 
 const LoginPage = () => {
@@ -14,7 +16,12 @@ const LoginPage = () => {
   return (
     <div>
       <InputForm inputType={InputType.Login} />
-      <Link to="/Signup">Sign Up</Link>
+      <div>
+        <Link to="/ForgotPassword">Forgot Password?</Link>
+      </div>
+      <div>
+        <Link to="/Signup">Sign Up Here</Link>
+      </div>
     </div>
   )
 }

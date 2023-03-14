@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom'
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 import AccountPage from '../../pages/AccountPage/AccountPage'
+import ForgotPasswordPage from '../../pages/ForgotPassword/ForgotPassword'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/Signup" element={<SignUpPage />} />
           <Route path="/Account" element={<AccountPage />} />
+          <Route path="/ForgotPassword" element={<ForgotPasswordPage />} />
         </Routes>
       </BrowserRouter>
     </div>

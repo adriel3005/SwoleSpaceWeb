@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
-import InputForm, { InputType } from '../../components/InputForm/InputForm'
+import InputForm, {
+  InputType,
+} from '../../components/forms/InputForm/InputForm'
 
 const SignUpPage = () => {
   return (

@@ -27,3 +27,11 @@ export async function signupWithPassword(
     password: password,
   })
 }
+
+export async function forgotPasswordWithEmail(email: string) {
+  return await supabase.auth.resetPasswordForEmail(email)
+}
+
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log(event, session)
+})
