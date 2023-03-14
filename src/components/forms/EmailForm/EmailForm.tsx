@@ -1,6 +1,3 @@
-// https://www.thisdot.co/blog/how-to-create-reusable-form-components-with-react-hook-forms-and-typescript
-// https://www.section.io/engineering-education/how-to-create-a-reusable-react-form/#:~:text=A%20Reusable%20component%20is%20a,Inside%20the%20Input.
-
 import {
   makeStyles,
   Container,
@@ -10,18 +7,21 @@ import {
 } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { UserData } from '../../supabase/SupabaseService'
-import { RootState } from '../../app/store'
-import { login, signup } from '../../supabase/SupabaseSlice'
+import { UserData } from '../../../supabase/SupabaseService'
+import { RootState } from '../../../app/store'
+import { forgotPassword } from '../../../supabase/SupabaseSlice'
 import type {} from 'redux-thunk/extend-redux'
 
 interface InputInterface {
   inputType: InputType
 }
 
+// TODO: Should probably look into moving this logic out. Otherwise not as reusable
+// As of now, it isn't as messy since it is only used for reset password... but having to add logic and conditions
+// for other use-cases is not neat.
+
 export enum InputType {
-  Login = 'Login',
-  SignUp = 'Sign up',
+  ForgotPassword = 'Forgot Password',
 }
 
 const useStyles = makeStyles(theme => ({
@@ -43,11 +43,9 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
   const onSubmit = async (formData: UserData) => {
     try {
       switch (userInput.inputType) {
-        case InputType.Login:
-          dispatch(login(formData))
-          break
-        case InputType.SignUp:
-          dispatch(signup(formData))
+        case InputType.ForgotPassword:
+          console.log('dispatching forgot password')
+          dispatch(forgotPassword(formData.email))
           break
         default:
           console.log('Input type undefined')
@@ -57,6 +55,33 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
       console.log('error caught: ' + error)
     }
   }
+
+  function SubmitButton(formType: InputInterface) {
+    if (formType.inputType === InputType.ForgotPassword) {
+      return (
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={submitButton}
+        >
+          Reset Password
+        </Button>
+      )
+    } else {
+      return (
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={submitButton}
+        ></Button>
+      )
+    }
+  }
+
   return (
     <Container>
       <Typography>{userInput.inputType}</Typography>
@@ -69,24 +94,7 @@ const InputForm: React.FC<InputInterface> = (userInput: InputInterface) => {
           fullWidth
           required
         />
-        <TextField
-          {...register('password')}
-          variant="outlined"
-          margin="normal"
-          label="Password"
-          type="password"
-          fullWidth
-          required
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={submitButton}
-        >
-          {userInput.inputType}
-        </Button>
+        <SubmitButton inputType={InputType.ForgotPassword}></SubmitButton>
       </form>
     </Container>
   )
