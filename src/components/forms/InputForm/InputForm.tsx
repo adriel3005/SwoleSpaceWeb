@@ -10,14 +10,18 @@ import {
 } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { UserData } from '../../supabase/SupabaseService'
-import { RootState } from '../../app/store'
-import { login, signup } from '../../supabase/SupabaseSlice'
+import { UserData } from '../../../supabase/SupabaseService'
+import { RootState } from '../../../app/store'
+import { login, signup } from '../../../supabase/SupabaseSlice'
 import type {} from 'redux-thunk/extend-redux'
 
 interface InputInterface {
   inputType: InputType
 }
+
+// TODO: Should probably look into moving this logic out. Otherwise not as reusable
+// As of now, it isn't as messy since it is only used for login and sign up... but having to add logic and conditions
+// for other use-cases is not neat.
 
 export enum InputType {
   Login = 'Login',
