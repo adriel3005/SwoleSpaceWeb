@@ -1,7 +1,13 @@
 import { AuthResponse, createClient } from '@supabase/supabase-js'
+import process from 'process'
 import { Database } from '../types/forecasts'
 
-export const supabase = createClient<Database>(supabaseURL, supabaseKey)
+require('dotenv').config()
+
+export const supabase = createClient<Database>(
+  process.env.REACT_APP_SUPABASE_URL,
+  process.env.REACT_APP_SUPABASE_KEY
+)
 
 export interface UserData {
   email: string
