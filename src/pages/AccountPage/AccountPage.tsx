@@ -1,4 +1,5 @@
 import { Container, Typography } from '@material-ui/core'
+import axios from 'axios'
 import { useState, useEffect } from 'react'
 
 import { supabase } from '../../supabase/SupabaseService'
@@ -23,9 +24,18 @@ const AccountPage = () => {
 
   async function RenderForecasts() {
     setLoading(true)
-    const { data, error } = await supabase.from('forecasts').select('*')
-    // render data to user
-    setWeatherData(data ?? [])
+    console.log('before axios')
+    axios
+      .get(process.env.REACT_APP_SWOLE_BACKEND_URL! + '/Weather')
+      .then(response => {
+        console.log('got a response from axios')
+        console.log(response.data)
+      })
+    console.log('after axios')
+
+    // const { data, error } = await supabase.from('forecasts').select('*')
+    // // render data to user
+    // setWeatherData(data ?? [])
     setLoading(false)
   }
 
