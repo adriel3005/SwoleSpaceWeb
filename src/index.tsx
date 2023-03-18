@@ -8,7 +8,6 @@ import { Provider } from 'react-redux'
 import { store } from '../src/app/store'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
-require('dotenv').config()
 root.render(
   <Provider store={store}>
     <React.StrictMode>
