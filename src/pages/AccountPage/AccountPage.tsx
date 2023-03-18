@@ -25,12 +25,10 @@ const AccountPage = () => {
   async function RenderForecasts() {
     setLoading(true)
     console.log('before axios')
-    axios
-      .get(process.env.REACT_APP_SWOLE_BACKEND_URL! + '/WeatherForecast')
-      .then(response => {
-        console.log('got a response from axios')
-        console.log(response.data)
-      })
+    axios.get(process.env.REACT_APP_SWOLE_BACKEND_URL!).then(response => {
+      console.log('got a response from axios')
+      console.log(response.data)
+    })
     console.log('after axios')
 
     // const { data, error } = await supabase.from('forecasts').select('*')
