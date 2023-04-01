@@ -35,10 +35,6 @@ const AccountPage = () => {
   async function RenderForecasts() {
     setLoading(true)
 
-    const config = {
-      headers: {},
-    }
-
     axios
       .get(process.env.REACT_APP_SWOLE_BACKEND_URL! + '/WeatherForecast', {
         headers: { Authorization: session?.access_token },
@@ -68,7 +64,6 @@ const AccountPage = () => {
 
   return (
     <Container>
-      {}
       <Typography>Account Page</Typography>
       {loading && <p>Loading...</p>}
       <>
