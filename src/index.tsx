@@ -6,15 +6,18 @@ import reportWebVitals from './reportWebVitals'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { Provider } from 'react-redux'
 import { store } from '../src/app/store'
+import { AppBar, Box, Button, Toolbar } from '@material-ui/core'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <CssBaseline />
-      <App />
-    </React.StrictMode>
-  </Provider>
+  <div>
+    <Provider store={store}>
+      <React.StrictMode>
+        <CssBaseline />
+        <App />
+      </React.StrictMode>
+    </Provider>
+  </div>
 )
 
 // If you want to start measuring performance in your app, pass a function
