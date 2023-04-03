@@ -8,6 +8,7 @@ import {
   UserData,
   forgotPasswordWithEmail,
   getUserSession,
+  signOut,
 } from './SupabaseService'
 
 interface Auth {
@@ -36,6 +37,11 @@ export const login = createAsyncThunk(
     return await signInWithPassword(userData.email, userData.password)
   }
 )
+
+// async supabase call to login
+export const logout = createAsyncThunk('auth/logout', async () => {
+  return await signOut()
+})
 
 // async supabase call to login
 export const signup = createAsyncThunk(
@@ -75,6 +81,21 @@ export const supabaseSlice = createSlice({
       state.loading = false
     })
     builder.addCase(login.rejected, state => {
+      state.loading = false
+    })
+    builder.addCase(logout.pending, state => {
+      state.loading = true
+    })
+    builder.addCase(logout.fulfilled, (state, action) => {
+      if (!action.payload.error) {
+        // update session if no error
+        state.session = null
+        console.log('logged out')
+        console.log(state.session)
+      }
+      state.loading = false
+    })
+    builder.addCase(logout.rejected, state => {
       state.loading = false
     })
     builder.addCase(signup.pending, state => {

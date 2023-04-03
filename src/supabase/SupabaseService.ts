@@ -21,6 +21,10 @@ export async function signInWithPassword(
   })
 }
 
+export async function signOut() {
+  return await supabase.auth.signOut()
+}
+
 export async function signupWithPassword(
   email: string,
   password: string
