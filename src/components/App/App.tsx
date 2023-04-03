@@ -9,8 +9,19 @@ import {
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 import AccountPage from '../../pages/AccountPage/AccountPage'
 import ForgotPasswordPage from '../../pages/ForgotPassword/ForgotPassword'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../app/store'
+import { retrieveSession } from '../../supabase/SupabaseSlice'
 
 function App() {
+  const loading = useSelector((state: RootState) => state.supabase.loading)
+  const session = useSelector((state: RootState) => state.supabase.session)
+  const dispatch = useDispatch()
+
+  if (session === null) {
+    dispatch(retrieveSession())
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
