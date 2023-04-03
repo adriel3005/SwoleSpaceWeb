@@ -1,11 +1,13 @@
 // good resource: https://blog.logrocket.com/using-redux-toolkits-createasyncthunk/
 import { Action, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Session, User } from '@supabase/supabase-js'
+import { useEffect } from 'react'
 import {
   signInWithPassword,
   signupWithPassword,
   UserData,
   forgotPasswordWithEmail,
+  getUserSession,
 } from './SupabaseService'
 
 interface Auth {
@@ -47,6 +49,13 @@ export const forgotPassword = createAsyncThunk(
   'auth/forgot',
   async (email: string) => {
     return await forgotPasswordWithEmail(email)
+  }
+)
+
+export const retrieveSession = createAsyncThunk(
+  'auth/retrieveSession',
+  async () => {
+    return await getUserSession()
   }
 )
 
@@ -94,6 +103,21 @@ export const supabaseSlice = createSlice({
       state.loading = false
     })
     builder.addCase(forgotPassword.rejected, state => {
+      state.loading = false
+    })
+    // get Session
+    builder.addCase(retrieveSession.pending, state => {
+      state.loading = true
+    })
+    builder.addCase(retrieveSession.fulfilled, (state, action) => {
+      if (!action.payload.error) {
+        // TODO: set session data to one retrieved
+        console.log(action.payload.data.session)
+        state.session = action.payload.data.session
+      }
+      state.loading = false
+    })
+    builder.addCase(retrieveSession.rejected, state => {
       state.loading = false
     })
   },

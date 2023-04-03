@@ -35,6 +35,10 @@ export async function forgotPasswordWithEmail(email: string) {
   return await supabase.auth.resetPasswordForEmail(email)
 }
 
+export async function getUserSession() {
+  return await supabase.auth.getSession()
+}
+
 supabase.auth.onAuthStateChange((event, session) => {
   console.log(event, session)
 })
