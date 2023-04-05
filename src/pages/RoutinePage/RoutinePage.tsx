@@ -34,7 +34,17 @@ const RoutinePage = () => {
     <div>
       <Typography>Routine Page</Typography>
       {/* Add super generic item  */}
-      <Button onClick={AddItem}>Add</Button>
+      <div
+        style={{
+          color: 'inherit',
+          marginRight: 0,
+          marginLeft: 'auto',
+          alignItems: 'end',
+          display: 'table',
+        }}
+      >
+        <Button onClick={AddItem}>Add</Button>
+      </div>
       {itemData?.map((element, i) => (
         <div key={i}>
           Item {i}
