@@ -21,6 +21,10 @@ export async function signInWithPassword(
   })
 }
 
+export async function signOut() {
+  return await supabase.auth.signOut()
+}
+
 export async function signupWithPassword(
   email: string,
   password: string
@@ -33,6 +37,10 @@ export async function signupWithPassword(
 
 export async function forgotPasswordWithEmail(email: string) {
   return await supabase.auth.resetPasswordForEmail(email)
+}
+
+export async function getUserSession() {
+  return await supabase.auth.getSession()
 }
 
 supabase.auth.onAuthStateChange((event, session) => {
