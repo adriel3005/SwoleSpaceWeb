@@ -31,21 +31,23 @@ function App() {
   // TODO: We will eventually want to move out the Toolbar to its own component when it gets too complex.
   return (
     <div>
-      <Box>
-        <AppBar className="none" position="static">
-          <Toolbar>
-            <Button
-              style={styling.toolbarButton}
-              onClick={async () => {
-                console.log('dispatched logout from toolbar button')
-                await dispatch(logout())
-              }}
-            >
-              Log out
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
+      {session !== null && (
+        <Box>
+          <AppBar className="none" position="static">
+            <Toolbar>
+              <Button
+                style={styling.toolbarButton}
+                onClick={async () => {
+                  console.log('dispatched logout from toolbar button')
+                  await dispatch(logout())
+                }}
+              >
+                Log out
+              </Button>
+            </Toolbar>
+          </AppBar>
+        </Box>
+      )}
 
       <div className="App">
         <BrowserRouter>
