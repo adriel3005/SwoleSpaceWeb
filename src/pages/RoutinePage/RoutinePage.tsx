@@ -4,19 +4,47 @@ import InputForm, {
   InputType,
 } from '../../components/forms/InputForm/InputForm'
 import { RootState } from '../../app/store'
-import { Typography } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
+import { useState } from 'react'
 
 const RoutinePage = () => {
-  const session = useSelector((state: RootState) => state.supabase.session)
+  type Item = {
+    itemName: string
+    repetitions: number
+    sets: number
+  }
 
-  if (session === null) {
-    console.log(session)
-    return <Navigate to="/" />
+  let dataSet: Item[] | null = []
+  const session = useSelector((state: RootState) => state.supabase.session)
+  const [itemData, setItemData] = useState(dataSet)
+
+  // TODO: look into why this sends to Account when signed in
+  //   if (session === null) {
+  //     console.log(session)
+  //     return <Navigate to="/" />
+  //   }
+
+  // Add hardcoded item for now
+  function AddItem() {
+    let newItem: Item = { itemName: 'Item Name', repetitions: 3, sets: 3 }
+    setItemData(itemData.concat(newItem))
   }
 
   return (
     <div>
       <Typography>Routine Page</Typography>
+      {/* Add super generic item  */}
+      <Button onClick={AddItem}>Add</Button>
+      {itemData?.map((element, i) => (
+        <div key={i}>
+          Item {i}
+          <br />
+          <p>Name: {element.itemName}</p>
+          <p>Reps: {element.repetitions}</p>
+          <p>Sets: {element.sets}</p>
+          <hr />
+        </div>
+      ))}
     </div>
   )
 }
