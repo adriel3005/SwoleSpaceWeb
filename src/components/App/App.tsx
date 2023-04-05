@@ -14,6 +14,7 @@ import { RootState } from '../../app/store'
 import { logout, retrieveSession } from '../../supabase/SupabaseSlice'
 import { AppBar, Box, Button, Toolbar, Typography } from '@material-ui/core'
 import { useEffect } from 'react'
+import RoutinePage from '../../pages/RoutinePage/RoutinePage'
 
 function App() {
   const loading = useSelector((state: RootState) => state.supabase.loading)
@@ -56,6 +57,7 @@ function App() {
             <Route path="/Signup" element={<SignUpPage />} />
             <Route path="/Account" element={<AccountPage />} />
             <Route path="/ForgotPassword" element={<ForgotPasswordPage />} />
+            <Route path="/Routine" element={<RoutinePage />} />
           </Routes>
         </BrowserRouter>
       </div>
