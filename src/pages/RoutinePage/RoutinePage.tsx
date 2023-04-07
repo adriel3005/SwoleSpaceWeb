@@ -6,6 +6,7 @@ import InputForm, {
 import { RootState } from '../../app/store'
 import { Button, Typography } from '@material-ui/core'
 import { useState } from 'react'
+import Modal from '../../components/modals/ExerciseModal/ExerciseModal'
 
 const RoutinePage = () => {
   type Item = {
@@ -17,6 +18,12 @@ const RoutinePage = () => {
   let dataSet: Item[] | null = []
   const session = useSelector((state: RootState) => state.supabase.session)
   const [itemData, setItemData] = useState(dataSet)
+  const [isOpen, setisOpen] = useState(false)
+
+  const toggle = () => {
+    console.log('toggling')
+    setisOpen(!isOpen)
+  }
 
   // TODO: look into why this sends to Account when signed in
   //   if (session === null) {
@@ -44,7 +51,9 @@ const RoutinePage = () => {
         }}
       >
         <Button onClick={AddItem}>Add</Button>
+        <Button onClick={toggle}>Toggle</Button>
       </div>
+      <Modal isOpen={isOpen} toggle={toggle}></Modal>
       {itemData?.map((element, i) => (
         <div key={i}>
           Item {i}
