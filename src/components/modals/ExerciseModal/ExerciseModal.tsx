@@ -13,7 +13,9 @@ export default function Modal(props: ModalType) {
       <>
         {props.isOpen && (
           <div className="modal-overlay" onClick={props.toggle}>
-            <div className="modal-box">{props.children}</div>
+            <div onClick={e => e.stopPropagation()} className="modal-box">
+              {props.children}
+            </div>
           </div>
         )}
       </>
@@ -41,5 +43,6 @@ const css2 = `
   height: 70%;
   padding: 1rem;
   border-radius: 1rem;
+  overflow-y: scroll;
 }
         `
