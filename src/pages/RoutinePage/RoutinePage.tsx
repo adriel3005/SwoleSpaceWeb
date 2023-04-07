@@ -5,7 +5,7 @@ import InputForm, {
 } from '../../components/forms/InputForm/InputForm'
 import { RootState } from '../../app/store'
 import { Button, Typography } from '@material-ui/core'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from '../../components/modals/ExerciseModal/ExerciseModal'
 
 const RoutinePage = () => {
@@ -16,13 +16,17 @@ const RoutinePage = () => {
   }
 
   let dataSet: Item[] | null = []
+  let modalDataSet: Item[] | null = []
   const session = useSelector((state: RootState) => state.supabase.session)
   const [itemData, setItemData] = useState(dataSet)
+  const [itemModalData, setItemModalData] = useState(modalDataSet)
   const [isOpen, setisOpen] = useState(false)
 
   const toggle = () => {
-    console.log('toggling')
     setisOpen(!isOpen)
+  }
+  const closeModal = () => {
+    setisOpen(false)
   }
 
   // TODO: look into why this sends to Account when signed in
@@ -31,11 +35,25 @@ const RoutinePage = () => {
   //     return <Navigate to="/" />
   //   }
 
-  // Add hardcoded item for now
-  function AddItem() {
-    let newItem: Item = { itemName: 'Item Name', repetitions: 3, sets: 3 }
-    setItemData(itemData.concat(newItem))
+  function AddItem(item: Item) {
+    setItemData(itemData.concat(item))
+    closeModal()
   }
+
+  // TODO: this should be moved out to own class where we retrieve the data.
+  // this data should then populate the modal
+  // Add hardcoded item for now
+  function AddModalItem() {
+    let newItem: Item = { itemName: 'Item Name', repetitions: 3, sets: 3 }
+    setItemModalData(itemModalData.concat(newItem))
+  }
+
+  useEffect(() => {
+    // Add 10 dummy items
+    if (itemModalData.length < 10) {
+      AddModalItem()
+    }
+  })
 
   return (
     <div>
@@ -50,10 +68,23 @@ const RoutinePage = () => {
           display: 'table',
         }}
       >
-        <Button onClick={AddItem}>Add</Button>
         <Button onClick={toggle}>Toggle</Button>
       </div>
-      <Modal isOpen={isOpen} toggle={toggle}></Modal>
+      <Modal
+        children={itemModalData?.map((element, i) => (
+          <div key={i}>
+            Item {i}
+            <br />
+            <p>Name: {element.itemName}</p>
+            <p>Reps: {element.repetitions}</p>
+            <p>Sets: {element.sets}</p>
+            <Button onClick={() => AddItem(element)}>Add Item</Button>
+            <hr />
+          </div>
+        ))}
+        isOpen={isOpen}
+        toggle={toggle}
+      ></Modal>
       {itemData?.map((element, i) => (
         <div key={i}>
           Item {i}
