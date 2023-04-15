@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, redirect } from 'react-router-dom'
 import { RootState } from '../../app/store'
-import { retrieveExercises } from '../../components/Services/Backend/SwoleBackend'
+import { retrieveWeather } from '../../components/Services/Backend/SwoleBackend'
 const AccountPage = () => {
   let dataSet:
     | {
@@ -33,7 +33,7 @@ const AccountPage = () => {
   async function RenderForecasts() {
     setLoading(true)
 
-    await retrieveExercises().then(response => {
+    await retrieveWeather().then(response => {
       setWeatherData(response.data ?? [])
     })
 
