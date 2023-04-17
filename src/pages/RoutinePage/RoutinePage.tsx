@@ -18,7 +18,13 @@ const RoutinePage = () => {
     exercise_type: string
   }
 
-  let dataSet: ExerciseItem[] | null = []
+  type RoutineExercise = {
+    exercise: ExerciseItem
+    repetitions: number
+    sets: number
+  }
+
+  let dataSet: RoutineExercise[] | null = []
   let modalDataSet: ExerciseItem[] | null = []
   const session = useSelector((state: RootState) => state.supabase.session)
   const [itemData, setItemData] = useState(dataSet)
@@ -66,7 +72,7 @@ const RoutinePage = () => {
           display: 'table',
         }}
       >
-        <Button onClick={toggle}>Toggle</Button>
+        <Button onClick={toggle}>Available Items</Button>
       </div>
       <Modal
         children={itemModalData?.map((element, i) => (
@@ -81,7 +87,12 @@ const RoutinePage = () => {
             <Button
               onClick={() => {
                 console.log(element)
-                setItemData(itemData.concat(element))
+                let item: RoutineExercise = {
+                  exercise: element,
+                  repetitions: 8,
+                  sets: 3,
+                }
+                setItemData(itemData.concat(item))
                 closeModal()
               }}
             >
@@ -97,11 +108,38 @@ const RoutinePage = () => {
         <div key={i}>
           Item {i}
           <br />
-          <p>created_at: {element.created_at}</p>
-          <p>exercise_description: {element.exercise_description}</p>
-          <p>exercise_id: {element.exercise_id}</p>
-          <p>exercise_name: {element.exercise_name}</p>
-          <p>exercise_type: {element.exercise_type}</p>
+          <p>Exercise: {element.exercise.exercise_name}</p>
+          <p>Description: {element.exercise.exercise_description}</p>
+          <div>
+            <p>Repetitions</p>
+            <input
+              type="number"
+              min="0"
+              max="200"
+              value={element.repetitions}
+              onChange={e => {
+                // TODO: This seems very slow. Is there a more efficient way to do this?
+                let updateArr = [...itemData]
+                updateArr[i].repetitions = e.target.valueAsNumber
+                setItemData(updateArr)
+              }}
+            />
+          </div>
+          <div>
+            <p>Sets:</p>
+            <input
+              type="number"
+              min="0"
+              max="50"
+              value={element.sets}
+              onChange={e => {
+                // TODO: This seems very slow. Is there a more efficient way to do this?
+                let updateArr = [...itemData]
+                updateArr[i].sets = e.target.valueAsNumber
+                setItemData(updateArr)
+              }}
+            />
+          </div>
           <hr />
         </div>
       ))}
