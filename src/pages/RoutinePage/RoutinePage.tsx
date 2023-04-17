@@ -10,12 +10,6 @@ import Modal from '../../components/modals/ExerciseModal/ExerciseModal'
 import { retrieveExercises } from '../../components/Services/Backend/SwoleBackend'
 
 const RoutinePage = () => {
-  type Item = {
-    itemName: string
-    repetitions: number
-    sets: number
-  }
-
   type ExerciseItem = {
     created_at: string
     exercise_description: string | null
@@ -44,21 +38,6 @@ const RoutinePage = () => {
     //return <Navigate to="/" />
   }
 
-  function AddItem(item: Item) {
-    //setItemData(itemData.concat(item))
-    closeModal()
-  }
-
-  // TODO: this should be moved out to own class where we retrieve the data.
-  // this data should then populate the modal
-  // Add hardcoded item for now
-  function AddModalItem() {
-    let newItem: Item = { itemName: 'Item Name', repetitions: 3, sets: 3 }
-    //setItemModalData(itemModalData.concat(newItem))
-
-    // TODO: Retrieve From backend and populate
-  }
-
   async function PopulateModal() {
     await retrieveExercises().then(response => {
       console.log(response.data)
@@ -67,11 +46,10 @@ const RoutinePage = () => {
   }
 
   useEffect(() => {
-    // Add 10 dummy items
+    // Populate Modal with DB items
     if (session !== null && itemModalData.length < 1) {
       PopulateModal()
       console.log('Modal was populated')
-      //AddModalItem()
     }
   })
 
