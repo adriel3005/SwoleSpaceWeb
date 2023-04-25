@@ -7,18 +7,23 @@ import { RootState } from '../../app/store'
 import { Button, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import Modal from '../../components/modals/ExerciseModal/ExerciseModal'
-import { retrieveExercises } from '../../components/Services/Backend/SwoleBackend'
+import {
+  addRoutineExercise,
+  retrieveExercises,
+} from '../../components/Services/Backend/SwoleBackend'
+import { v4 as uuidv4 } from 'uuid'
 
 const RoutinePage = () => {
   type ExerciseItem = {
     created_at: string
     exercise_description: string | null
-    exercise_id: number
+    exercise_id: string
     exercise_name: string
     exercise_type: string
   }
 
   type RoutineExercise = {
+    uuid: string
     exercise: ExerciseItem
     repetitions: number
     sets: number
@@ -59,6 +64,19 @@ const RoutinePage = () => {
     }
   })
 
+  // TODO: Move this out.
+  async function SaveRoutine() {
+    for (let index = 0; index < itemData.length; index++) {
+      const e = itemData[index]
+      await addRoutineExercise(
+        e.uuid,
+        e.exercise.exercise_id,
+        e.repetitions,
+        e.sets
+      )
+    }
+  }
+
   return (
     <div>
       <Typography>Routine Page</Typography>
@@ -88,6 +106,7 @@ const RoutinePage = () => {
               onClick={() => {
                 console.log(element)
                 let item: RoutineExercise = {
+                  uuid: uuidv4(),
                   exercise: element,
                   repetitions: 8,
                   sets: 3,
@@ -143,6 +162,9 @@ const RoutinePage = () => {
           <hr />
         </div>
       ))}
+      <div>
+        <Button onClick={SaveRoutine}>Save Test</Button>
+      </div>
     </div>
   )
 }
