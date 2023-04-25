@@ -1,8 +1,4 @@
 import { useSelector } from 'react-redux'
-import { Link, Navigate } from 'react-router-dom'
-import InputForm, {
-  InputType,
-} from '../../components/forms/InputForm/InputForm'
 import { RootState } from '../../app/store'
 import { Button, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
@@ -64,16 +60,23 @@ const RoutinePage = () => {
     }
   })
 
-  // TODO: Move this out.
   async function SaveRoutine() {
-    for (let index = 0; index < itemData.length; index++) {
-      const e = itemData[index]
-      await addRoutineExercise(
-        e.uuid,
-        e.exercise.exercise_id,
-        e.repetitions,
-        e.sets
-      )
+    try {
+      for (let index = 0; index < itemData.length; index++) {
+        const e = itemData[index]
+        await addRoutineExercise(
+          e.uuid,
+          e.exercise.exercise_id,
+          e.repetitions,
+          e.sets,
+          session?.user.id!
+        )
+      }
+      alert('Routine Added')
+      // TODO: redirect user to page with Routines
+    } catch (error) {
+      console.log(error)
+      throw error
     }
   }
 

@@ -28,7 +28,8 @@ export async function addRoutineExercise(
   reID: string,
   eID: string,
   rep: number,
-  set: number
+  set: number,
+  userID: string
 ): Promise<any> {
   return await axios.post(
     process.env.REACT_APP_SWOLE_BACKEND_URL! + '/AddRoutineExercise',
@@ -37,6 +38,7 @@ export async function addRoutineExercise(
       exercise_id: eID,
       repetition: rep,
       sets: set,
+      user_id: userID,
     },
     {
       headers: {
