@@ -10,6 +10,7 @@ import {
 } from '../../components/Services/Backend/SwoleBackend'
 import { v4 as uuidv4 } from 'uuid'
 import { Link } from 'react-router-dom'
+import { fontWeight } from '@material-ui/system'
 
 const UserRoutinePage = () => {
   type ExerciseItem = {
@@ -30,6 +31,8 @@ const UserRoutinePage = () => {
   type Routines = {
     user_routine_id: string
     created_at: string
+    routine_name: string
+    routine_description: string
   }
 
   let dataSet: Routines[] | null = []
@@ -52,7 +55,7 @@ const UserRoutinePage = () => {
 
   useEffect(() => {
     // Populate Modal with DB items
-    if (session !== null /*&& itemModalData.length < 1*/) {
+    if (session !== null && itemData.length < 1) {
       RetrieveUserRoutines()
     }
   })
@@ -76,8 +79,13 @@ const UserRoutinePage = () => {
       </div>
       {itemData?.map((element, i) => (
         <div key={i}>
-          Routine {i}
-          <br />
+          <hr />
+          <h3 style={{ fontWeight: 'normal', lineHeight: '0' }}>
+            {element.routine_name}
+          </h3>
+          <h5 style={{ fontWeight: 'normal', lineHeight: '1' }}>
+            {element.routine_description}
+          </h5>
           <p>Routine ID: {element.user_routine_id}</p>
           <p>Created At: {element.created_at}</p>
           <hr />
