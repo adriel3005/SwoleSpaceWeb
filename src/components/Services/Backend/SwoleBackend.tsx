@@ -56,13 +56,17 @@ export async function addRoutineExercise(
 // userID requires UUID
 export async function addUserRoutine(
   urID: string,
-  userID: string
+  userID: string,
+  rName: string,
+  rDescription: string
 ): Promise<any> {
   return await axios.post(
     process.env.REACT_APP_SWOLE_BACKEND_URL! + '/AddUserRoutine',
     {
       user_routine_id: urID,
       user_id: userID,
+      routine_name: rName,
+      routine_description: rDescription,
     },
     {
       headers: {

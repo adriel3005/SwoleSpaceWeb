@@ -32,12 +32,21 @@ const RoutinePage = () => {
   const [itemData, setItemData] = useState(dataSet)
   const [itemModalData, setItemModalData] = useState(modalDataSet)
   const [isOpen, setisOpen] = useState(false)
+  const [isOpenSave, setisOpenSave] = useState(false)
+  const [routineName, setRoutineName] = useState('')
+  const [routineDescription, setRoutineDescription] = useState('')
 
   const toggle = () => {
     setisOpen(!isOpen)
   }
   const closeModal = () => {
     setisOpen(false)
+  }
+  const toggleSave = () => {
+    setisOpenSave(!isOpen)
+  }
+  const closeSaveModal = () => {
+    setisOpenSave(false)
   }
 
   //TODO: look into why this sends to Account when signed in
@@ -61,18 +70,32 @@ const RoutinePage = () => {
     }
   })
 
-  async function SaveUserRoutine(user_routine_id: string) {
+  async function SaveUserRoutine(
+    user_routine_id: string,
+    user_routine_name: string,
+    user_routine_description: string
+  ) {
     try {
-      await addUserRoutine(user_routine_id, session?.user.id!)
+      await addUserRoutine(
+        user_routine_id,
+        session?.user.id!,
+        user_routine_name,
+        user_routine_description
+      )
     } catch (error) {}
   }
-  async function SaveRoutineExercises() {
+  async function SaveRoutineExercises(
+    generatedUUID: string,
+    rName: string,
+    rDescription: string
+  ) {
     // local uuid for user routine
-    let generatedUUID = uuidv4()
+    //let generatedUUID = uuidv4()
 
     try {
+      // TODO: We should show a modal first to allow the user to name routine and give minor description
       // create user routine
-      await SaveUserRoutine(generatedUUID)
+      await SaveUserRoutine(generatedUUID, rName, rDescription)
 
       // iterate through routine exercises
       for (let index = 0; index < itemData.length; index++) {
@@ -181,8 +204,75 @@ const RoutinePage = () => {
         </div>
       ))}
       <div>
-        <Button onClick={SaveRoutineExercises}>Save Test</Button>
+        {/* <Button onClick={SaveRoutineExercises}>Save Routine</Button> */}
+        <Button onClick={toggleSave}>Save Routine</Button>
       </div>
+      <Modal
+        isOpen={isOpenSave}
+        toggle={toggleSave}
+        children={
+          <div>
+            <div>
+              <p> Routine Name:</p>
+              <input
+                type="text"
+                maxLength={50}
+                onChange={e => {
+                  setRoutineName(e.target.value)
+                }}
+              />
+              <p> Routine Description:</p>
+              <input
+                type="text"
+                maxLength={100}
+                onChange={e => {
+                  setRoutineDescription(e.target.value)
+                }}
+              />
+            </div>
+            <Button
+              onClick={() => {
+                let gUUID = uuidv4()
+                // Trigger Routine save
+                SaveRoutineExercises(gUUID, routineName, routineDescription)
+                closeSaveModal()
+              }}
+            >
+              Confirm Routine
+            </Button>
+          </div>
+        }
+      ></Modal>
+      {/* <Modal isOpen={isOpenSave} toggle={toggleSave}>
+        <div>
+          <p> Routine Name:</p>
+          <input
+            type="text"
+            maxLength={50}
+            onChange={e => {
+              setRoutineName(e.target.value)
+            }}
+          />
+          <p> Routine Description:</p>
+          <input
+            type="text"
+            maxLength={100}
+            onChange={e => {
+              setRoutineDescription(e.target.value)
+            }}
+          />
+        </div>
+        <Button
+          onClick={() => {
+            let gUUID = uuidv4()
+            // Trigger Routine save
+            SaveRoutineExercises(gUUID, routineName, routineDescription)
+            closeSaveModal()
+          }}
+        >
+          Confirm Routine
+        </Button>
+      </Modal> */}
     </div>
   )
 }
