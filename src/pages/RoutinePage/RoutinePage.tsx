@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import Modal from '../../components/modals/ExerciseModal/ExerciseModal'
 import {
   addRoutineExercise,
+  addUserRoutine,
   retrieveExercises,
 } from '../../components/Services/Backend/SwoleBackend'
 import { v4 as uuidv4 } from 'uuid'
@@ -60,16 +61,30 @@ const RoutinePage = () => {
     }
   })
 
-  async function SaveRoutine() {
+  async function SaveUserRoutine(user_routine_id: string) {
     try {
+      await addUserRoutine(user_routine_id, session?.user.id!)
+    } catch (error) {}
+  }
+  async function SaveRoutineExercises() {
+    // local uuid for user routine
+    let generatedUUID = uuidv4()
+
+    try {
+      // create user routine
+      await SaveUserRoutine(generatedUUID)
+
+      // iterate through routine exercises
       for (let index = 0; index < itemData.length; index++) {
         const e = itemData[index]
         await addRoutineExercise(
           e.uuid,
+          generatedUUID,
           e.exercise.exercise_id,
           e.repetitions,
           e.sets,
-          session?.user.id!
+          session?.user.id!,
+          index
         )
       }
       alert('Routine Added')
@@ -166,7 +181,7 @@ const RoutinePage = () => {
         </div>
       ))}
       <div>
-        <Button onClick={SaveRoutine}>Save Test</Button>
+        <Button onClick={SaveRoutineExercises}>Save Test</Button>
       </div>
     </div>
   )
