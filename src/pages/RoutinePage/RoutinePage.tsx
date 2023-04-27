@@ -133,7 +133,7 @@ const RoutinePage = () => {
           display: 'table',
         }}
       >
-        <Button onClick={toggle}>Available Items</Button>
+        <Button onClick={toggle}>Available Exercises</Button>
       </div>
       <Modal
         children={itemModalData?.map((element, i) => (
@@ -158,7 +158,7 @@ const RoutinePage = () => {
                 closeModal()
               }}
             >
-              Add Item
+              Add
             </Button>
             <hr />
           </div>
