@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { RootState } from '../../app/store'
 import { Button, Typography } from '@material-ui/core'
+import { Link, Navigate, redirect, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Modal from '../../components/modals/ExerciseModal/ExerciseModal'
 import {
@@ -48,6 +49,7 @@ const RoutinePage = () => {
   const closeSaveModal = () => {
     setisOpenSave(false)
   }
+  const navigate = useNavigate()
 
   //TODO: look into why this sends to Account when signed in
   if (session === null) {
@@ -111,7 +113,7 @@ const RoutinePage = () => {
         )
       }
       alert('Routine Added')
-      // TODO: redirect user to page with Routines
+      navigate('/UserRoutine')
     } catch (error) {
       console.log(error)
       throw error
@@ -204,8 +206,9 @@ const RoutinePage = () => {
         </div>
       ))}
       <div>
-        {/* <Button onClick={SaveRoutineExercises}>Save Routine</Button> */}
-        <Button onClick={toggleSave}>Save Routine</Button>
+        {itemData.length > 0 && (
+          <Button onClick={toggleSave}>Save Routine</Button>
+        )}
       </div>
       <Modal
         isOpen={isOpenSave}
@@ -235,7 +238,6 @@ const RoutinePage = () => {
                 let gUUID = uuidv4()
                 // Trigger Routine save
                 SaveRoutineExercises(gUUID, routineName, routineDescription)
-                closeSaveModal()
               }}
             >
               Confirm Routine
@@ -243,36 +245,6 @@ const RoutinePage = () => {
           </div>
         }
       ></Modal>
-      {/* <Modal isOpen={isOpenSave} toggle={toggleSave}>
-        <div>
-          <p> Routine Name:</p>
-          <input
-            type="text"
-            maxLength={50}
-            onChange={e => {
-              setRoutineName(e.target.value)
-            }}
-          />
-          <p> Routine Description:</p>
-          <input
-            type="text"
-            maxLength={100}
-            onChange={e => {
-              setRoutineDescription(e.target.value)
-            }}
-          />
-        </div>
-        <Button
-          onClick={() => {
-            let gUUID = uuidv4()
-            // Trigger Routine save
-            SaveRoutineExercises(gUUID, routineName, routineDescription)
-            closeSaveModal()
-          }}
-        >
-          Confirm Routine
-        </Button>
-      </Modal> */}
     </div>
   )
 }
