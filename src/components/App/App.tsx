@@ -5,6 +5,7 @@ import {
   BrowserRouter,
   Routes, //replaces "Switch" used till v5
   Route,
+  Link,
 } from 'react-router-dom'
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 import AccountPage from '../../pages/AccountPage/AccountPage'
@@ -15,6 +16,7 @@ import { logout, retrieveSession } from '../../supabase/SupabaseSlice'
 import { AppBar, Box, Button, Toolbar, Typography } from '@material-ui/core'
 import { useEffect } from 'react'
 import RoutinePage from '../../pages/RoutinePage/RoutinePage'
+import UserRoutinePage from '../../pages/UserRoutinePage/UserRoutinePage'
 
 function App() {
   const loading = useSelector((state: RootState) => state.supabase.loading)
@@ -32,32 +34,39 @@ function App() {
   // TODO: We will eventually want to move out the Toolbar to its own component when it gets too complex.
   return (
     <div>
-      {session !== null && (
-        <Box>
-          <AppBar className="none" position="static">
-            <Toolbar>
-              <Button
-                style={styling.toolbarButton}
-                onClick={async () => {
-                  console.log('dispatched logout from toolbar button')
-                  await dispatch(logout())
-                }}
-              >
-                Log out
-              </Button>
-            </Toolbar>
-          </AppBar>
-        </Box>
-      )}
-
       <div className="App">
         <BrowserRouter>
+          {session !== null && (
+            <Box>
+              <AppBar className="none" position="static">
+                <Toolbar style={styling.toolbar}>
+                  <Button
+                    component={Link}
+                    to="/UserRoutine"
+                    style={styling.toolbarButton}
+                  >
+                    My Routines
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      console.log('dispatched logout from toolbar button')
+                      await dispatch(logout())
+                    }}
+                    style={styling.toolbarButton}
+                  >
+                    Log out
+                  </Button>
+                </Toolbar>
+              </AppBar>
+            </Box>
+          )}
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/Signup" element={<SignUpPage />} />
             <Route path="/Account" element={<AccountPage />} />
             <Route path="/ForgotPassword" element={<ForgotPasswordPage />} />
             <Route path="/Routine" element={<RoutinePage />} />
+            <Route path="/UserRoutine" element={<UserRoutinePage />} />
           </Routes>
         </BrowserRouter>
       </div>
@@ -66,10 +75,13 @@ function App() {
 }
 
 const styling = {
-  toolbarButton: {
+  toolbar: {
     color: 'inherit',
     marginRight: 0,
     marginLeft: 'auto',
+  },
+  toolbarButton: {
+    color: 'inherit',
   },
 }
 
