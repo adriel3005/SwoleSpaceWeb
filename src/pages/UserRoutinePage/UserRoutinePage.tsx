@@ -53,16 +53,8 @@ const UserRoutinePage = () => {
     setisOpen(false)
   }
 
-  //TODO: look into why this sends to Account when signed in
-  if (session === null) {
-    console.log(session)
-    //return <Navigate to="/" />
-  }
-
   async function RetrieveUserRoutines() {
-    // TODO: retrieve user routine exercises created
     await retrieveUserRoutines(session?.user.id!).then(response => {
-      console.log(response.data)
       setItemData(response.data ?? [])
     })
   }
@@ -71,25 +63,26 @@ const UserRoutinePage = () => {
     await retrieveRoutineExercises(routine_id).then(response => {
       console.log(response.data)
       setItemModalData(response.data ?? [])
-      // TODO: After we retrieve the routine exercises associated with user routine, we should display the routine
-      // exercises int the modal. When the page loads, we retrieve all exercises. Let's use this exercise data
-      // to retrieve from. The exercise_id is a unique field that we can use for this purpose
       toggle()
     })
 
     // Then we have to retrieve specific data on exercise by exercise id
     // Should we retrieve this on the first call to prevent making a second call?
+    // If so, we should modify the stored procedure to do this for us
   }
 
-  function findSpecificExercise(eID: number): ExerciseItem | undefined {
-    console.log(eID)
-    console.log(exerciseData)
+  // It's likely better for now to return elements in one go. That way we don't have to find twice for the same element
+  function returnSpecificExercise(eID: number) {
     var e = exerciseData.find(obj => {
       return obj.exercise_id.toString() === eID.toString()
     })
 
-    console.log(e)
-    return e
+    return (
+      <div>
+        <p>exercise_name: {e?.exercise_name}</p>
+        <p>exercise_description:{e?.exercise_description}</p>
+      </div>
+    )
   }
 
   useEffect(() => {
@@ -111,7 +104,6 @@ const UserRoutinePage = () => {
   return (
     <div>
       <Typography>User Routine Page</Typography>
-      {/* Add super generic item  */}
       <div
         style={{
           color: 'inherit',
@@ -141,7 +133,6 @@ const UserRoutinePage = () => {
           >
             View
           </Button>
-          {/* //TODO: <Button onClick={}>Start</Button> */}
           <hr />
         </div>
       ))}
@@ -149,17 +140,7 @@ const UserRoutinePage = () => {
         <Modal
           children={itemModalData?.map((element, i) => (
             <div key={i}>
-              <p>
-                exercise_name:{' '}
-                {findSpecificExercise(element.exercise_id)?.exercise_name}
-              </p>
-              <p>
-                exercise_description:{' '}
-                {
-                  findSpecificExercise(element.exercise_id)
-                    ?.exercise_description
-                }
-              </p>
+              {returnSpecificExercise(element.exercise_id)}
               <p>exercise_id: {element.exercise_id}</p>
               <p>repetitions: {element.repetitions}</p>
               <p>sets: {element.sets}</p>
