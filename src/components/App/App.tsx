@@ -6,6 +6,7 @@ import {
   Routes, //replaces "Switch" used till v5
   Route,
   Link,
+  Navigate,
 } from 'react-router-dom'
 import SignUpPage from '../../pages/SignUpPage/SignUpPage'
 import AccountPage from '../../pages/AccountPage/AccountPage'
@@ -68,6 +69,7 @@ function App() {
             <Route path="/Routine" element={<RoutinePage />} />
             <Route path="/UserRoutine" element={<UserRoutinePage />} />
           </Routes>
+          {!session && <Navigate to="/" replace={true} />}
         </BrowserRouter>
       </div>
     </div>
