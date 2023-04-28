@@ -87,3 +87,17 @@ export async function retrieveUserRoutines(userID: string): Promise<any> {
     }
   )
 }
+
+export async function retrieveRoutineExercises(
+  routineID: string
+): Promise<any> {
+  return await axios.get(
+    process.env.REACT_APP_SWOLE_BACKEND_URL! + '/GetRoutineExercises',
+    {
+      params: { u_routine_id: routineID },
+      headers: {
+        Authorization: store.getState().supabase.session?.access_token,
+      },
+    }
+  )
+}
